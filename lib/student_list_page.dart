@@ -29,7 +29,7 @@ class _StudentListPageState extends State<StudentListPage> {
   void initState() {
     super.initState();
     context.read<StudentBloc>().add(LoadStudents());
-    
+
     _scrollController.addListener(() {
       setState(() {
         _elevation = _scrollController.offset > 10 ? 4 : 0;
@@ -54,10 +54,8 @@ class _StudentListPageState extends State<StudentListPage> {
     final isDarkMode = theme.brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: isDarkMode 
-          ? Colors.grey[900]
-          : Colors.grey[50],
-      
+      backgroundColor: isDarkMode ? Colors.grey[900] : Colors.grey[50],
+
       appBar: AppBar(
         title: Text(
           "Daftar Siswa",
@@ -70,13 +68,9 @@ class _StudentListPageState extends State<StudentListPage> {
         centerTitle: false,
         elevation: _elevation,
         shadowColor: isDarkMode ? Colors.black : Colors.grey[300],
-        backgroundColor: isDarkMode 
-            ? Colors.grey[850]
-            : Colors.white,
+        backgroundColor: isDarkMode ? Colors.grey[850] : Colors.white,
         shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-            bottom: Radius.circular(20),
-          ),
+          borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
         ),
         actions: [
           _buildNotificationButton(isDarkMode),
@@ -110,9 +104,7 @@ class _StudentListPageState extends State<StudentListPage> {
         backgroundColor: theme.primaryColor,
         foregroundColor: Colors.white,
         elevation: 6,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         icon: const Icon(Icons.person_add_alt_1, size: 22),
         label: const Text(
           "Tambah Siswa",
@@ -150,7 +142,7 @@ class _StudentListPageState extends State<StudentListPage> {
                   },
                 ),
               ),
-              
+
               if (state.unreadCount > 0)
                 Positioned(
                   right: 2,
@@ -223,11 +215,7 @@ class _StudentListPageState extends State<StudentListPage> {
         shape: BoxShape.circle,
       ),
       child: IconButton(
-        icon: Icon(
-          Icons.logout,
-          color: Colors.redAccent,
-          size: 22,
-        ),
+        icon: Icon(Icons.logout, color: Colors.redAccent, size: 22),
         onPressed: () => _showLogoutDialog(context, isDarkMode),
       ),
     );
@@ -238,23 +226,122 @@ class _StudentListPageState extends State<StudentListPage> {
       onRefresh: _refreshStudents,
       child: SingleChildScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
-        child: SizedBox(
+        child: Container(
           height: MediaQuery.of(context).size.height * 0.8,
+          padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
-                Icons.people_outline,
-                size: 80,
-                color: isDarkMode ? Colors.grey[600] : Colors.grey[400],
+              // Container dengan efek neumorphism
+              Container(
+                width: 180,
+                height: 180,
+                decoration: BoxDecoration(
+                  color: isDarkMode ? Colors.grey[800] : Colors.white,
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: isDarkMode
+                          ? Colors.black.withOpacity(0.3)
+                          : Colors.grey[300]!.withOpacity(0.8),
+                      offset: const Offset(8, 8),
+                      blurRadius: 16,
+                      spreadRadius: 1,
+                    ),
+                    BoxShadow(
+                      color: isDarkMode
+                          ? Colors.grey[700]!.withOpacity(0.2)
+                          : Colors.white.withOpacity(0.9),
+                      offset: const Offset(-8, -8),
+                      blurRadius: 16,
+                      spreadRadius: 1,
+                    ),
+                  ],
+                ),
+                child: Center(
+                  child: Icon(
+                    Icons.people_outline,
+                    size: 100,
+                    color: isDarkMode ? Colors.grey[400] : Colors.grey[300],
+                  ),
+                ),
               ),
-              const SizedBox(height: 20),
+              
+              const SizedBox(height: 32),
+              
+              // Pesan utama dengan gradien
+              ShaderMask(
+                shaderCallback: (bounds) {
+                  return LinearGradient(
+                    colors: [
+                      isDarkMode ? Colors.blue[200]! : theme.primaryColor,
+                      isDarkMode ? Colors.purple[200]! : theme.primaryColor.withOpacity(0.7),
+                    ],
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                  ).createShader(bounds);
+                },
+                child: Text(
+                  "Belum ada siswa terdaftar",
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.white,
+                    letterSpacing: -0.5,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              
+              const SizedBox(height: 16),
+              
+              // Pesan deskriptif
               Text(
-                "Belum ada siswa terdaftar",
+                "Tambahkan siswa pertama Anda untuk memulai",
                 style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
                   color: isDarkMode ? Colors.grey[400] : Colors.grey[600],
+                  height: 1.5,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              
+              const SizedBox(height: 20),
+              
+              // Petunjuk
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: isDarkMode
+                      ? Colors.grey[800]!.withOpacity(0.5)
+                      : Colors.grey[100],
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: isDarkMode
+                        ? Colors.grey[700]!
+                        : Colors.grey[300]!,
+                    width: 1,
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.info_outline,
+                      color: isDarkMode ? Colors.blue[200] : theme.primaryColor,
+                      size: 20,
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Text(
+                        "Swipe ke bawah untuk refresh data",
+                        style: TextStyle(
+                          color: isDarkMode ? Colors.grey[400] : Colors.grey[600],
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -264,7 +351,11 @@ class _StudentListPageState extends State<StudentListPage> {
     );
   }
 
-  Widget _buildStudentList(StudentLoaded state, ThemeData theme, bool isDarkMode) {
+  Widget _buildStudentList(
+    StudentLoaded state,
+    ThemeData theme,
+    bool isDarkMode,
+  ) {
     return RefreshIndicator(
       onRefresh: _refreshStudents,
       child: ListView.separated(
@@ -274,7 +365,7 @@ class _StudentListPageState extends State<StudentListPage> {
         separatorBuilder: (_, __) => const SizedBox(height: 12),
         itemBuilder: (context, index) {
           final student = state.students[index];
-          
+
           return _buildStudentCard(student, theme, isDarkMode);
         },
       ),
@@ -285,9 +376,7 @@ class _StudentListPageState extends State<StudentListPage> {
     return Card(
       elevation: 2,
       margin: EdgeInsets.zero,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       color: isDarkMode ? Colors.grey[800] : Colors.white,
       child: InkWell(
         onTap: () {
@@ -310,11 +399,7 @@ class _StudentListPageState extends State<StudentListPage> {
                   color: theme.primaryColor.withOpacity(0.1),
                   shape: BoxShape.circle,
                 ),
-                child: Icon(
-                  Icons.person,
-                  size: 30,
-                  color: theme.primaryColor,
-                ),
+                child: Icon(Icons.person, size: 30, color: theme.primaryColor),
               ),
               const SizedBox(width: 16),
               Expanded(
@@ -393,9 +478,7 @@ class _StudentListPageState extends State<StudentListPage> {
       SnackBar(
         content: const Text("Tidak ada notifikasi baru"),
         behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         margin: const EdgeInsets.all(16),
       ),
     );
@@ -405,9 +488,7 @@ class _StudentListPageState extends State<StudentListPage> {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         backgroundColor: isDarkMode ? Colors.grey[800] : Colors.white,
         title: Text(
           "Logout",
