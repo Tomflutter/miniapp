@@ -257,52 +257,6 @@ class _StudentListPageState extends State<StudentListPage> {
                   color: isDarkMode ? Colors.grey[400] : Colors.grey[600],
                 ),
               ),
-              const SizedBox(height: 8),
-              Text(
-                "Tambahkan siswa pertama Anda",
-                style: TextStyle(
-                  fontSize: 14,
-                  color: isDarkMode ? Colors.grey[500] : Colors.grey[500],
-                ),
-              ),
-              const SizedBox(height: 30),
-              OutlinedButton(
-                onPressed: () async {
-                  await Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => const RegisterPage()),
-                  );
-                  context.read<StudentBloc>().add(LoadStudents());
-                },
-                style: OutlinedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  side: BorderSide(
-                    color: theme.primaryColor,
-                    width: 1.5,
-                  ),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      Icons.person_add,
-                      color: theme.primaryColor,
-                      size: 18,
-                    ),
-                    const SizedBox(width: 8),
-                    Text(
-                      "Tambah Siswa",
-                      style: TextStyle(
-                        color: theme.primaryColor,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
             ],
           ),
         ),
